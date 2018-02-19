@@ -2,7 +2,8 @@
 let args = require("args");
 
 args
-    .command("create", "Create an application")
+    .command("application", "Create an application")
+    .command("boundedcontext", "Create a boundedcontext")
     ;
 
 const flags = args.parse(process.argv);

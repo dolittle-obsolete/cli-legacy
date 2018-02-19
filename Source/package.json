@@ -5,11 +5,12 @@
   "main": "dolittle.js",
   "bin": {
     "dolittle": "dolittle.js",
-    "dolittle-boundedcontext": "boundedcontext/boundedcontext.js",
-    "dolittle-boundedcontext-create": "boundedcontext/create.js",
+    "dolittle-boundedcontexts": "boundedcontexts/boundedcontexts.js",
     "dolittle-config": "config/config.js",
-    "dolittle-application": "application/application.js",
-    "dolittle-application-create": "application/create.js"
+    "dolittle-applications": "applications/applications.js",
+    "dolittle-create": "create/create.js",
+    "dolittle-create-application": "applications/create.js",
+    "dolittle-create-boundedcontext": "boundedcontexts/create.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

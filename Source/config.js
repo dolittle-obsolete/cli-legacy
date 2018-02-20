@@ -4,12 +4,15 @@ function makeSureFoldersExists(config) {
     folderHandler.MakeDirIfNotExists(config.rootFolder); 
     folderHandler.MakeDirIfNotExists(config.boilerPlatesFolder); 
 }
+function getUserHome() {
+    return process.env.HOME || process.env.USERPROFILE;
+}
 
 const _rootFolder = new WeakMap();
 
 class Config {
     constructor() {
-        _rootFolder.set(this, "./.dolittle");
+        _rootFolder.set(this, `${getUserHome()}/.dolittle`);
         makeSureFoldersExists(this);
     }
 

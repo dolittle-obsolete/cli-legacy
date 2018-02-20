@@ -1,18 +1,14 @@
 #!/usr/bin/env node
-let args = require("args");
+const args = require("args");
 
-const BoilerPlates = require("../BoilerPlates");
-
+const boilerPlates = require("../boilerPlates");
 
 args
-    .example("dolittle boundedcontext create <name>","Creates and registers a bounded context with the given name");
+    .example("dolittle boundedcontext create <name>", "Creates and registers a bounded context with the given name");
 
 const flags = args.parse(process.argv);
-if( args.sub.length == 0 ) args.showHelp();
+if (args.sub.length == 0) args.showHelp();
 
-
-let b = new BoilerPlates();
-b.downloadAllBoilerplates();
-//b.doStuff();
+boilerPlates.downloadAllBoilerplates();
 
 console.log("End of create");

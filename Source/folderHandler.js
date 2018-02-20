@@ -2,11 +2,7 @@ var fs = require('fs');
 
 class folderHandler
 {
-    constructor(){
-
-    }
-
-    static MakeDir(folderName)
+    static MakeDirIfNotExists(folderName)
     {
         var dir = folderName;
 

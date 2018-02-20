@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 let args = require("args");
 
-let blah = require("../BoilerPlates");
+const BoilerPlates = require("../BoilerPlates");
 
 
 args
@@ -12,6 +12,7 @@ if( args.sub.length == 0 ) args.showHelp();
 
 
 let b = new BoilerPlates();
+b.downloadAllBoilerplates();
 //b.doStuff();
 
-console.log("Hello world");
+console.log("End of create");

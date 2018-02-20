@@ -8,10 +8,10 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/dolittle.js",
+            "program": "${workspaceFolder}/boundedcontexts/create.js",
             "args": [
-                "boundedcontext",
-                "create"
+                "Test1",
+                "Test2"
             ]
         }
     ]

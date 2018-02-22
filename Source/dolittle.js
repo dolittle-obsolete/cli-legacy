@@ -8,6 +8,7 @@ args
   //.option('reload', 'Enable/disable livereloading')
   .command("config", "Work with the configuration of Dolittle CLI")
   .command("create", "Create a Dolittle artifact")
+  .command("update", "Updates all local boilerplates")
   .command("applications", "Work with applications")
   .command("boundedcontexts", "Work with bounded contexts")
   ;

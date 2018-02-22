@@ -10,6 +10,13 @@ class folderHandler
             fs.mkdirSync(dir);
         }
     }
+
+    static CreateBoundedContextFolder(boundedcontextName)
+    {
+        let projectFolder = `../../${boundedcontextName}`
+        folderHandler.MakeDirIfNotExists(projectFolder);
+        return projectFolder;
+    }
 }
 
 module.exports = folderHandler;

@@ -10,8 +10,7 @@
             "name": "Launch Program",
             "program": "${workspaceFolder}/boundedcontexts/create.js",
             "args": [
-                "Test1",
-                "Test2"
+                "Test1"
             ]
         }
     ]

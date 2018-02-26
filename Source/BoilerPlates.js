@@ -6,6 +6,7 @@ const config = require("./config");
 const cheerio = require("cheerio");
 const BoilerPlate = require("./BoilerPlate");
 const menuHandler = require("./menuHandler");
+const folderHandler = require("./folderHandler");
 
 const _rootFolder = new WeakMap();
 
@@ -76,10 +77,17 @@ class BoilerPlates {
         fs.createReadStream(zipFile)
             .pipe(unzip.Parse())
             .on('entry', function (entry) {
-                var fileName = entry.path.split('\\').pop().split('/').pop();
-                let extractFolder = `${boilerplate}-master/Source/`;
-                if (entry.path !== extractFolder && entry.path.includes(extractFolder)) {
-                    entry.pipe(fs.createWriteStream(toFolder+"/"+fileName));
+                let extractFolder = `${boilerplate}-master/Content/`;
+
+                if( entry.path.indexOf(extractFolder) == 0 ) {
+                    let fileName = entry.path.substr(extractFolder.length);
+                    let targetPath = toFolder+"/"+fileName;
+                    if( entry.type == "Directory") {
+                        folderHandler.MakeDirIfNotExists(targetPath);
+                        entry.autodrain();
+                    } else {
+                        entry.pipe(fs.createWriteStream(targetPath));
+                    } 
                 } else {
                     entry.autodrain();
                 }

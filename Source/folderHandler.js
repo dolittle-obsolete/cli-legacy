@@ -13,7 +13,7 @@ class folderHandler
 
     static CreateBoundedContextFolder(boundedcontextName)
     {
-        let projectFolder = `../../${boundedcontextName}`
+        let projectFolder = `${boundedcontextName}`
         folderHandler.MakeDirIfNotExists(projectFolder);
         return projectFolder;
     }

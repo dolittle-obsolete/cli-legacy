@@ -11,8 +11,6 @@ const folderHandler = require("./folderHandler");
 const _rootFolder = new WeakMap();
 const _boilerPlatesPerLanguage = new WeakMap();
 
-
-
 class BoilerPlates {
 
     constructor() {
@@ -21,15 +19,16 @@ class BoilerPlates {
 
     get boilerPlatesPerLanguage() { return _boilerPlatesPerLanguage.get(this); }
 
+    getBoilerPlateByName(name) {
+
+    }
+
     getBoilerPlatesForLanguage(language) {
         let promise = new Promise((resolve, reject) => {
-            /*if (this.boilerPlatesPerLanguage == {}) {
+            let done = () => resolve(_boilerPlatesPerLanguage.get(this)[language]);
+            if (Object.keys(this.boilerPlatesPerLanguage).length == 0) {
                 this.populateBoilerPlates().then(done);
-            } else done();*/
-
-            this.populateBoilerPlates().then(() => {
-                resolve(_boilerPlatesPerLanguage.get(this)[language]);
-            });
+            } else done();
         });
         return promise;
     }

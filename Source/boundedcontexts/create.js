@@ -15,8 +15,8 @@ if (args.sub.length == 1) {
     boundedcontextName = args.sub[0];
 
     console.log('Loading boilerplates..');
-    boilerPlates.getBoilerPlatesForLanguage("csharp").then(receivedBoilerplates => {
-        menuHandler.DisplayBoilerplateSelection(receivedBoilerplates).then((selectedBoilerplate) => {
+    boilerPlates.getBoilerPlatesForLanguage("csharp").then(boilerPlates => {
+        menuHandler.DisplayBoilerplateSelection(boilerPlates).then((selectedBoilerplate) => {
             console.log(`Creating ${boundedcontextName}`);
             
             var projectFolder = folderHandler.CreateBoundedContextFolder(boundedcontextName);

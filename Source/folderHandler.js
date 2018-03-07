@@ -1,7 +1,16 @@
-var fs = require('fs');
+var fs = require('fs-extra');
 
 class folderHandler
 {
+    static CopyDirectory(source, destination)
+    {
+        fs.copy(source, destination, function (err) {
+            if (err) {
+                console.error(err);
+            }
+        });
+    }
+
     static Rename(file, toName)
     {
         fs.rename(file, toName, function(err) {

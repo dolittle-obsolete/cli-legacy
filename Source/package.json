@@ -23,6 +23,7 @@
   "dependencies": {
     "args": "^3.0.8",
     "cheerio": "^1.0.0-rc.2",
+    "fs-extra": "^5.0.0",
     "inquirer": "^5.1.0",
     "unzip": "^0.1.11"
   }

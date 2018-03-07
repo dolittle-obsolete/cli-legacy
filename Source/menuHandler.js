@@ -13,8 +13,10 @@ class menuHandler
                 message: 'What boilerplate do you want to use?',
                 choices: function() {
                     var boilerplatesChoices = [];
-                    boilerplates.forEach(element => {
-                        boilerplatesChoices.push(element.name);
+                    var l = Object.keys(boilerplates).length;
+                    
+                    Object.keys(boilerplates).forEach(element => {
+                        boilerplatesChoices.push(element);
                     });
                     return boilerplatesChoices;
                 },

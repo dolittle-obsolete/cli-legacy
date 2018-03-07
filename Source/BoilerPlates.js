@@ -23,16 +23,20 @@ class BoilerPlates {
 
     getBoilerPlatesForLanguage(language) {
         let promise = new Promise((resolve, reject) => {
-            let done = () => resolve(_boilerPlatesPerLanguage.get(this)[language];
-            if (this.boilerPlatesPerLanguage == {}) {
+            /*if (this.boilerPlatesPerLanguage == {}) {
                 this.populateBoilerPlates().then(done);
-            } else done();
+            } else done();*/
+
+            this.populateBoilerPlates().then(() => {
+                resolve(_boilerPlatesPerLanguage.get(this)[language]);
+            });
         });
         return promise;
     }
 
     generateProjectFrom(boilerPlate, projectFolder) {
-        // copy the extracted files into project folder
+        var src = `${config.boilerPlatesFolder}/${boilerPlate}-master/Content/Source`;
+        folderHandler.CopyDirectory(src, projectFolder);
     }
 
     getBoilerplateURLs() {
@@ -50,8 +54,8 @@ class BoilerPlates {
     }
 
     getLanguageFromName(boilerPlateName) {
-        if( boilerPlateName.toLower() == "filetemplates") return "filetemplates";
-        return boilerPlateName.substr(0, boilerPlateName.indexOf(".") - 1).toLower();
+        if( boilerPlateName.toLowerCase() == "filetemplates") return "filetemplates";
+        return boilerPlateName.substr(0, boilerPlateName.indexOf(".")).toLowerCase();
     }
 
     downloadBoilerPlate(boilerPlateName, url) {
@@ -62,7 +66,8 @@ class BoilerPlates {
             // Unzip - get metadata from JSON file - create BoilerPlate and resolve
 
             downloader.download(url, "application/zip", stream).then(() => {
-                let boilerPlatePath = `${config.boilerPlatesFolder}/${boilerPlateName}`;
+                // let boilerPlatePath = `${config.boilerPlatesFolder}/${boilerPlateName}`;
+                let boilerPlatePath = `${config.boilerPlatesFolder}/`;
 
                 fs.createReadStream(destinationPath)
                     .pipe(unzip.Extract({
@@ -96,10 +101,15 @@ class BoilerPlates {
 
     downloadAllBoilerplateFiles(boilerplates) {
         let promise = new Promise((resolve, reject) => {
+            var index = 0;
             boilerplates.forEach(boilerplate => {
-                let source = `http://github.com/dolittle-boilerplates/${boilerplate.name}/archive/master.zip`;
+                let source = `http://github.com/dolittle-boilerplates/${boilerplate}/archive/master.zip`;
                 this.getActualDownloadUrlFrom(source).then(url => {
-                    this.downloadBoilerPlate(boilerplate, url).then(resolve);
+                    this.downloadBoilerPlate(boilerplate, url).then(() => {
+                        index ++;
+                        if(index == boilerplates.length)
+                            resolve();
+                    });
                 });
             });
         });
@@ -119,14 +129,12 @@ class BoilerPlates {
 
     populateBoilerPlates() {
         let promise = new Promise((resolve, reject) => {
-
+            this.downloadAllBoilerplates().then(resolve);
         });
         return promise;
     }
 
-
     /*
-    
         generateBoilerplateProject(projectFolder) {
     
             var localBoilerplates = this.getLocalBoilerplates();

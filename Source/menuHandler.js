@@ -25,8 +25,8 @@ class menuHandler
                 }
             }
             ]).then(answers => {
-                let boilerplateToExtract = answers["boilerplate"];
-                resolve(boilerplateToExtract);
+                let selectedBoilerPlate = answers["boilerplate"];
+                resolve(selectedBoilerPlate);
             });
         });
 

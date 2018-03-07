@@ -11,6 +11,7 @@ args
   .command("update", "Updates all local boilerplates")
   .command("applications", "Work with applications")
   .command("boundedcontexts", "Work with bounded contexts")
+  .command("login", "Generates your login token for Azure AD")
   ;
 
 const flags = args.parse(process.argv);

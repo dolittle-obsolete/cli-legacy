@@ -10,6 +10,8 @@
     "dolittle-applications": "applications/applications.js",
     "dolittle-update": "update/update.js",
     "dolittle-create": "create/create.js",
+    "dolittle-create-command": "create/command.js",
+    "dolittle-login": "login/login.js",
     "dolittle-create-application": "applications/create.js",
     "dolittle-create-boundedcontext": "boundedcontexts/create.js"
   },

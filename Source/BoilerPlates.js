@@ -19,6 +19,10 @@ class BoilerPlates {
 
     get boilerPlatesPerLanguage() { return _boilerPlatesPerLanguage.get(this); }
 
+    get hasBoilerPlates() {
+        return Object.keys(this.boilerPlatesPerLanguage).length > 0;
+    }
+
     getBoilerPlateByName(name) {
 
     }
@@ -26,7 +30,7 @@ class BoilerPlates {
     getBoilerPlatesForLanguage(language) {
         let promise = new Promise((resolve, reject) => {
             let done = () => resolve(_boilerPlatesPerLanguage.get(this)[language]);
-            if (Object.keys(this.boilerPlatesPerLanguage).length == 0) {
+            if (!this.hasBoilerPlates) {
                 this.populateBoilerPlates().then(done);
             } else done();
         });
@@ -34,7 +38,7 @@ class BoilerPlates {
     }
 
     generateProjectFrom(boilerPlate, projectFolder) {
-        var src = `${config.boilerPlatesFolder}/${boilerPlate}-master/Content/Source`;
+        var src = `${config.boilerPlatesFolder}/${boilerPlate}/Content/Source`;
         folderHandler.CopyDirectory(src, projectFolder);
     }
 
@@ -53,7 +57,7 @@ class BoilerPlates {
     }
 
     getLanguageFromName(boilerPlateName) {
-        if( boilerPlateName.toLowerCase() == "filetemplates") return "filetemplates";
+        if (boilerPlateName.toLowerCase() == "filetemplates") return "filetemplates";
         return boilerPlateName.substr(0, boilerPlateName.indexOf(".")).toLowerCase();
     }
 
@@ -65,20 +69,15 @@ class BoilerPlates {
             // Unzip - get metadata from JSON file - create BoilerPlate and resolve
 
             downloader.download(url, "application/zip", stream).then(() => {
-                // let boilerPlatePath = `${config.boilerPlatesFolder}/${boilerPlateName}`;
                 let boilerPlatePath = `${config.boilerPlatesFolder}/`;
 
                 fs.createReadStream(destinationPath)
                     .pipe(unzip.Extract({
                         path: boilerPlatePath
                     })
-                        .on("finish", () => {
-                            let language = this.getLanguageFromName(boilerPlateName);
-                            let boilerPlate = new BoilerPlate(language, boilerPlateName, url);
-                            let boilerPlates = this.boilerPlatesPerLanguage[language] || {};
-                            boilerPlates[boilerPlateName] = boilerPlate;
-                            this.boilerPlatesPerLanguage[language] = boilerPlates;
-
+                        .on("close", () => {
+                            fs.renameSync(`${config.boilerPlatesFolder}/${boilerPlateName}-master`, `${config.boilerPlatesFolder}/${boilerPlateName}`);
+                            fs.unlinkSync(destinationPath);
                             resolve();
                         }));
             });
@@ -105,8 +104,8 @@ class BoilerPlates {
                 let source = `http://github.com/dolittle-boilerplates/${boilerplate}/archive/master.zip`;
                 this.getActualDownloadUrlFrom(source).then(url => {
                     this.downloadBoilerPlate(boilerplate, url).then(() => {
-                        index ++;
-                        if(index == boilerplates.length)
+                        index++;
+                        if (index == boilerplates.length)
                             resolve();
                     });
                 });
@@ -128,7 +127,42 @@ class BoilerPlates {
 
     populateBoilerPlates() {
         let promise = new Promise((resolve, reject) => {
-            this.downloadAllBoilerplates().then(resolve);
+            this.populateFromLocalBoilerPlates().then(() => {
+                if( !this.hasBoilerPlates ) {
+                    this.downloadAllBoilerplates().then(() => {
+                        populateFromLocalBoilerPlates().then(resolve);
+                    });
+                } else resolve();
+            });
+        });
+        return promise;
+    }
+
+    populateFromLocalBoilerPlates() {
+        let promise = new Promise((resolve, reject) => {
+            fs.readdir(config.boilerPlatesFolder,(error, files) => {
+                files.forEach(file => {
+                    let boilerPlatePath = `${config.boilerPlatesFolder}/${file}`;
+                    if( fs.statSync(boilerPlatePath).isDirectory ) {
+                        let language = this.getLanguageFromName(file);
+                        let boilerPlateFile = `${boilerPlatePath}/boilerplate.json`;
+                        let name = "<unknown>";
+                        let description = "<no description>";
+                        if( fs.existsSync(boilerPlateFile) ) {
+                            let boilerPlateDetails = JSON.parse(fs.readFileSync(boilerPlateFile).toString());
+                            name = boilerPlateDetails.name;
+                            description = boilerPlateDetails.description;
+                        }
+                        let boilerPlate = new BoilerPlate(language, name, description);
+                        let boilerPlates = this.boilerPlatesPerLanguage[language] || {};
+                        boilerPlates[name] = boilerPlate;
+                        this.boilerPlatesPerLanguage[language] = boilerPlates;
+                    }
+                });
+
+                resolve();
+            });
+        
         });
         return promise;
     }

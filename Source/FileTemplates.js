@@ -5,11 +5,21 @@ const downloader = require("./downloader");
 const config = require("./config");
 const cheerio = require("cheerio");
 const BoilerPlate = require("./BoilerPlate");
+const BoilerPlates = require("./BoilerPlates");
 const menuHandler = require("./menuHandler");
 const folderHandler = require("./folderHandler");
 
 class FileTemplates {
+    constructor() {
+        
+    }
+
+    getForLanguage(language) {
+        
+    }
     
+
+    /*
     downloadFileTemplates() {
         let promise = new Promise((resolve, reject) => {
             let destinationPath = `${config.fileTemplatesFolder}/FileTemplates-master.zip`;
@@ -95,6 +105,7 @@ class FileTemplates {
             console.log('Command already exists');
         }
     }
+    */
 }
 
 const fileTemplates = new FileTemplates();

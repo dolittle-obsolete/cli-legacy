@@ -15,14 +15,20 @@ if (args.sub.length == 1) {
     boundedcontextName = args.sub[0];
 
     console.log('Loading boilerplates..');
-    boilerPlates.getBoilerPlatesForLanguage("csharp").then(boilerPlates => {
-        menuHandler.DisplayBoilerplateSelection(boilerPlates).then((selectedBoilerplate) => {
-            console.log(`Creating ${boundedcontextName}`);
-            
-            var projectFolder = folderHandler.CreateBoundedContextFolder(boundedcontextName);
-            boilerPlates.generateProjectFrom(selectedBoilerplate, projectFolder);
-            
-            console.log(`${boundedcontextName} created successfully`);
+    menuHandler.DisplayLanguageSelection().then((selectedLanguage) => {
+        console.log(selectedLanguage);
+        boilerPlates.getBoilerPlatesForLanguage(selectedLanguage).then(boilerPlatesSelection => {
+            menuHandler.DisplayBoilerplateSelection(boilerPlatesSelection).then((selectedBoilerplate) => {
+
+                console.log(`Creating ${boundedcontextName}`);
+
+                let boilerplateFolderName = boilerPlates.getBoilerPlateByName(selectedBoilerplate, 'csharp').realName;
+                
+                var projectFolder = folderHandler.CreateBoundedContextFolder(boundedcontextName);
+                boilerPlates.generateProjectFrom(boilerplateFolderName, projectFolder);
+                
+                console.log(`${boundedcontextName} created successfully`);
+            });
         });
     });
 }

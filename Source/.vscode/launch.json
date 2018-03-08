@@ -8,9 +8,9 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/boundedcontexts/create.js",
+            "program": "${workspaceFolder}/create/command.js",
             "args": [
-                "katt"
+                "Test1"
             ]
         }
     ]

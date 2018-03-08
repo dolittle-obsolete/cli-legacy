@@ -23,8 +23,8 @@ class BoilerPlates {
         return Object.keys(this.boilerPlatesPerLanguage).length > 0;
     }
 
-    getBoilerPlateByName(name) {
-
+    getBoilerPlateByName(name, language) {
+        return this.boilerPlatesPerLanguage[language][name];
     }
 
     getBoilerPlatesForLanguage(language) {
@@ -142,8 +142,9 @@ class BoilerPlates {
         let promise = new Promise((resolve, reject) => {
             fs.readdir(config.boilerPlatesFolder,(error, files) => {
                 files.forEach(file => {
+
                     let boilerPlatePath = `${config.boilerPlatesFolder}/${file}`;
-                    if( fs.statSync(boilerPlatePath).isDirectory ) {
+                    if( fs.statSync(boilerPlatePath).isDirectory && !this.skipFileWithName(file)) {
                         let language = this.getLanguageFromName(file);
                         let boilerPlateFile = `${boilerPlatePath}/boilerplate.json`;
                         let name = "<unknown>";
@@ -153,7 +154,7 @@ class BoilerPlates {
                             name = boilerPlateDetails.name;
                             description = boilerPlateDetails.description;
                         }
-                        let boilerPlate = new BoilerPlate(language, name, description);
+                        let boilerPlate = new BoilerPlate(language, name, description, file);
                         let boilerPlates = this.boilerPlatesPerLanguage[language] || {};
                         boilerPlates[name] = boilerPlate;
                         this.boilerPlatesPerLanguage[language] = boilerPlates;
@@ -165,6 +166,16 @@ class BoilerPlates {
         
         });
         return promise;
+    }
+
+    skipFileWithName(name) {
+        var skipFile = false;
+        if(name == '.DS_Store')
+            skipFile = true;
+        if(name == 'FileTemplates')
+            skipFile = true;
+
+        return skipFile;
     }
 
     /*

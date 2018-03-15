@@ -113,7 +113,7 @@ class BoilerPlates {
         });
         return promise;
     }
-    
+
     downloadAllBoilerplates() {
         let promise = new Promise((resolve, reject) => {
             this.getBoilerplateURLs().then((boilerPlates) => {
@@ -127,6 +127,7 @@ class BoilerPlates {
         let promise = new Promise((resolve, reject) => {
             this.populateFromLocalBoilerPlates().then(() => {
                 if( !this.hasBoilerPlates ) {
+                    console.log('downloading..')
                     this.downloadAllBoilerplates().then(() => {
                         this.populateFromLocalBoilerPlates().then(resolve);
                     });

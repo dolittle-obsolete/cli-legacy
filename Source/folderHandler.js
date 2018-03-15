@@ -1,21 +1,16 @@
 var fs = require('fs-extra');
+const path = require('path');
 
 class folderHandler
 {
     static CopyDirectory(source, destination)
     {
-        fs.copy(source, destination, function (err) {
-            if (err) {
-                console.error(err);
-            }
-        });
+        fs.copySync(source, destination);
     }
 
     static Rename(file, toName)
     {
-        fs.rename(file, toName, function(err) {
-            if ( err ) console.log('ERROR: ' + err);
-        });
+        fs.renameSync(file, toName);
     }
 
     static DoesFileExist(file)
@@ -41,6 +36,25 @@ class folderHandler
         folderHandler.MakeDirIfNotExists(projectFolder);
         return projectFolder;
     }
+
+    static SearchRecursive(dir, pattern) {
+        var results = [];
+
+        fs.readdirSync(dir).forEach(function (dirInner) {
+            dirInner = path.resolve(dir, dirInner);
+            var stat = fs.statSync(dirInner);
+
+            if (stat.isDirectory()) {
+                results = results.concat(folderHandler.SearchRecursive(dirInner, pattern));
+            }
+
+            if (stat.isFile() && dirInner.endsWith(pattern)) {
+                results.push(dirInner);
+            }
+        });
+
+        return results;
+    };
 }
 
 module.exports = folderHandler;

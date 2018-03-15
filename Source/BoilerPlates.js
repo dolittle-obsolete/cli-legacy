@@ -113,9 +113,7 @@ class BoilerPlates {
         });
         return promise;
     }
-
-
-
+    
     downloadAllBoilerplates() {
         let promise = new Promise((resolve, reject) => {
             this.getBoilerplateURLs().then((boilerPlates) => {
@@ -130,7 +128,7 @@ class BoilerPlates {
             this.populateFromLocalBoilerPlates().then(() => {
                 if( !this.hasBoilerPlates ) {
                     this.downloadAllBoilerplates().then(() => {
-                        populateFromLocalBoilerPlates().then(resolve);
+                        this.populateFromLocalBoilerPlates().then(resolve);
                     });
                 } else resolve();
             });
@@ -146,14 +144,13 @@ class BoilerPlates {
                     let boilerPlatePath = `${config.boilerPlatesFolder}/${file}`;
                     if( fs.statSync(boilerPlatePath).isDirectory && !this.skipFileWithName(file)) {
                         let language = this.getLanguageFromName(file);
-                        let boilerPlateFile = `${boilerPlatePath}/boilerplate.json`;
-                        let name = "<unknown>";
-                        let description = "<no description>";
-                        if( fs.existsSync(boilerPlateFile) ) {
-                            let boilerPlateDetails = JSON.parse(fs.readFileSync(boilerPlateFile).toString());
-                            name = boilerPlateDetails.name;
-                            description = boilerPlateDetails.description;
-                        }
+                        let boilerPlateFile = `${boilerPlatePath}/boilerplate.js`;
+                        
+                        let templateDetails = require(boilerPlateFile);
+
+                        let name = templateDetails.name;
+                        let description = templateDetails.description;
+
                         let boilerPlate = new BoilerPlate(language, name, description, file);
                         let boilerPlates = this.boilerPlatesPerLanguage[language] || {};
                         boilerPlates[name] = boilerPlate;
@@ -177,79 +174,6 @@ class BoilerPlates {
 
         return skipFile;
     }
-
-    /*
-        generateBoilerplateProject(projectFolder) {
-    
-            var localBoilerplates = this.getLocalBoilerplates();
-    
-            if (localBoilerplates.length == 0) {
-                this.getBoilerplateURLs().then((receivedBoilerplates) => {
-                    this.loadOnlineBoilerplates(receivedBoilerplates, projectFolder);
-                });
-            } else {
-                this.loadLocalBoilerplates(localBoilerplates, projectFolder);
-            }
-        }
-    
-        loadLocalBoilerplates(receivedBoilerplates, projectFolder) {
-            console.log("Loading local boilerplates");
-            this.selectAndExtractBoilerplate(receivedBoilerplates, projectFolder);
-        }
-    
-        loadOnlineBoilerplates(receivedBoilerplates, projectFolder) {
-            console.log("Updating local boilerplates");
-            this.downloadAllBoilerplates().then(() => {
-                this.selectAndExtractBoilerplate(receivedBoilerplates, projectFolder);
-            });
-        }
-    
-        selectAndExtractBoilerplate(receivedBoilerplates, projectFolder) {
-            menuHandler.DisplayBoilerplateSelection(receivedBoilerplates).then((selectedBoilerplate) => {
-                this.extractBoilerplate(selectedBoilerplate, projectFolder);
-                console.log("");
-                console.log(`Bounded Context ${projectFolder} created.`);
-            });
-        }
-    
-    
-    
-        extractBoilerplate(boilerplate, toFolder) {
-            let zipFile = `${config.boilerPlatesFolder}/${boilerplate}.zip`;
-            fs.createReadStream(zipFile)
-                .pipe(unzip.Parse())
-                .on('entry', function (entry) {
-                    let extractFolder = `${boilerplate}-master/Content/`;
-    
-                    if (entry.path.indexOf(extractFolder) == 0) {
-                        let fileName = entry.path.substr(extractFolder.length);
-                        let targetPath = toFolder + "/" + fileName;
-                        if (entry.type == "Directory") {
-                            folderHandler.MakeDirIfNotExists(targetPath);
-                            entry.autodrain();
-                        } else {
-                            entry.pipe(fs.createWriteStream(targetPath));
-                        }
-                    } else {
-                        entry.autodrain();
-                    }
-                });
-        }
-        getLocalBoilerplates() {
-            var localBoilerplates = [];
-    
-            fs.readdirSync(config.boilerPlatesFolder).forEach(file => {
-                if (!file.startsWith(".")) {
-                    localBoilerplates.push(new BoilerPlate(file.substring(0, file.lastIndexOf('.'))));
-                }
-            });
-    
-            return localBoilerplates;
-        }
-    
-    
-    */
-
 }
 
 const boilerPlates = new BoilerPlates();

@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/create/command.js",
+            "program": "${workspaceFolder}/boundedcontexts/create.js",
             "args": [
                 "Test1"
             ]

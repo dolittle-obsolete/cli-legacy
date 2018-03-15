@@ -2,6 +2,32 @@ const inquirer = require('inquirer');
 
 class menuHandler
 {
+    static DisplayNamespaceSelection(defaultNamespace)
+    {
+        let promise = new Promise((resolve, reject) => {
+            console.log("");
+            inquirer.prompt([
+            {
+                type: 'list',
+                name: 'namespace',
+                message: 'Select namespace:',
+                choices: function() {
+                    var languages = [defaultNamespace, 'Enter manually'];
+                    return languages;
+                },
+                filter: function(val) {
+                    return val;
+                }
+            }
+            ]).then(answers => {
+                let selectedLanguage = answers["namespace"];
+                resolve(selectedLanguage);
+            });
+        });
+
+        return promise;
+    }
+
     static DisplayLanguageSelection()
     {
         let promise = new Promise((resolve, reject) => {

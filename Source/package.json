@@ -10,7 +10,7 @@
     "dolittle-applications": "applications/applications.js",
     "dolittle-update": "update/update.js",
     "dolittle-create": "create/create.js",
-    "dolittle-create-command": "create/command.js",
+    "dolittle-add-command": "add/command.js",
     "dolittle-login": "login/login.js",
     "dolittle-create-application": "applications/create.js",
     "dolittle-create-boundedcontext": "boundedcontexts/create.js"
@@ -24,7 +24,9 @@
     "args": "^3.0.8",
     "cheerio": "^1.0.0-rc.2",
     "fs-extra": "^5.0.0",
+    "handlebars": "^4.0.11",
     "inquirer": "^5.1.0",
+    "readline-sync": "^1.4.9",
     "unzip": "^0.1.11"
   }
 }
